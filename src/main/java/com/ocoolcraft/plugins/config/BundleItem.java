@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.ocoolcraft.plugins.enchants.Glow;
 import com.ocoolcraft.plugins.utils.ColorUtil;
 import com.ocoolcraft.plugins.utils.FileUtil;
+import com.ocoolcraft.plugins.utils.HiddenStringUtil;
 import com.ocoolcraft.plugins.utils.InventoryUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,7 +29,7 @@ public class BundleItem {
 
     private boolean enchant;
 
-    private Inventory realInventory = null;
+    private ItemStack[] realInventory = null;
 
     public String getName() {
         return name;
@@ -71,8 +72,8 @@ public class BundleItem {
         bundleItem.setSound(BundleSound.getDefaultSound());
         bundleItem.setName(name);
         bundleItem.setEnchant(false);
-        bundleItem.setDescription(new String[] {"id:" + name});
-        bundleItem.setMaterial(Material.CHEST.name());
+        bundleItem.setDescription(new String[] {HiddenStringUtil.encodeString("id:"+name)});
+        bundleItem.setMaterial(Material.WOOD_HOE.name());
         bundleItem.saveBundle();
         return bundleItem;
     }
@@ -89,25 +90,27 @@ public class BundleItem {
             return null;
         }
         List<String> list = itemStack.getItemMeta().getLore();
-        if (list == null) {
+        if (list == null || list.size() == 0) {
             return null;
         }
-        for(String line:list) {
-            if (line.startsWith("id:")) {
-                String name = line.split(":")[1];
-                BundleItem bundleItem = BundleItem.loadBundle(name);
-                return bundleItem;
+        for (String line:list) {
+            if (HiddenStringUtil.hasHiddenString(line)) {
+                String data = HiddenStringUtil.extractHiddenString(line);
+                if (data.startsWith("id:")) {
+                    String name = data.split(":")[1];
+                    return loadBundle(name);
+                }
             }
         }
         return null;
     }
 
     public ItemStack getBundle() {
-        Material materialT = Material.CHEST;
+        Material materialT = Material.DIAMOND_AXE;
         try {
             materialT = Material.getMaterial(material);
         } catch (Exception ex) {
-            materialT = Material.CHEST;
+            materialT = Material.DIAMOND_AXE;
         }
         ItemStack itemStack = new ItemStack(materialT,1);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -131,7 +134,7 @@ public class BundleItem {
         return lore;
     }
 
-    private Inventory getRealInventory() {
+    private ItemStack[] getRealInventory() {
         if (realInventory == null) {
             realInventory = InventoryUtil.fromBase64(inventory);
         }
@@ -140,7 +143,7 @@ public class BundleItem {
 
     public void addItemToPlayer(Player player) {
         Inventory playerInv = player.getInventory();
-        for(ItemStack itemStack: getRealInventory().getContents()) {
+        for(ItemStack itemStack: getRealInventory()) if(itemStack != null) {
             if(player.getInventory().firstEmpty() == -1) {
                 player.getWorld().dropItemNaturally(player.getLocation(),itemStack);
             } else {

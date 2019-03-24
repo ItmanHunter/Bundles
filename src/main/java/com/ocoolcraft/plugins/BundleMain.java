@@ -16,7 +16,7 @@ public class BundleMain extends JavaPlugin {
         registerGlow();
         getCommand("cbundle").setExecutor(new CreateBundle());
         getCommand("getbundle").setExecutor(new GetBundle());
-        getServer().getPluginManager().registerEvents(new BundleListener(), this);
+        getServer().getPluginManager().registerEvents(new BundleListener(this), this);
         getLogger().info("Enabled BundleMain");
     }
 

@@ -1,15 +1,22 @@
 package com.ocoolcraft.plugins;
 
 import com.ocoolcraft.plugins.config.BundleItem;
-import org.bukkit.Sound;
+import com.ocoolcraft.plugins.tasks.EffectApply;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class BundleListener implements Listener {
+
+    private JavaPlugin plugin;
+
+    public BundleListener(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
@@ -17,28 +24,12 @@ public class BundleListener implements Listener {
             Player player = event.getPlayer();
             BundleItem bundleItem = BundleItem.getBundle(player.getItemInHand());
             if (bundleItem != null) {
-                if (bundleItem.getSound() != null) {
-                    player.getWorld().playSound(player.getLocation(),
-                            bundleItem.getSound().getSound(),
-                            bundleItem.getSound().getVolume(),
-                            bundleItem.getSound().getPitch());
-                }
+                event.setCancelled(true);
                 player.getInventory().remove(player.getItemInHand());
                 bundleItem.addItemToPlayer(player);
-                event.setCancelled(true);
+                Bukkit.getScheduler().runTask(plugin,new EffectApply(plugin,bundleItem,player));
             }
         }
-    }
-
-    @EventHandler
-    public void onPlace(BlockPlaceEvent event) {
-            Player player = event.getPlayer();
-            BundleItem bundleItem = BundleItem.getBundle(player.getItemInHand());
-            if (bundleItem != null) {
-                player.getInventory().remove(player.getItemInHand());
-                bundleItem.addItemToPlayer(player);
-                event.setCancelled(true);
-            }
     }
 
 }
