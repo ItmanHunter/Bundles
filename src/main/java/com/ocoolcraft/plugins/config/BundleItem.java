@@ -1,6 +1,7 @@
 package com.ocoolcraft.plugins.config;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ocoolcraft.plugins.enchants.Glow;
 import com.ocoolcraft.plugins.utils.ColorUtil;
 import com.ocoolcraft.plugins.utils.FileUtil;
@@ -80,7 +81,7 @@ public class BundleItem {
 
     public void saveBundle() {
         String fileName = LOCATION + File.separator + name + ".json";
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String bundleJson = gson.toJson(this,BundleItem.class);
         FileUtil.writeStringToFile(bundleJson,fileName);
     }
