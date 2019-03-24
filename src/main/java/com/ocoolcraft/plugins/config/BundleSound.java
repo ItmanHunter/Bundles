@@ -8,7 +8,7 @@ public class BundleSound {
 
     public static BundleSound getDefaultSound() {
         BundleSound bundleSound = new BundleSound();
-        bundleSound.setName(Sound.LEVEL_UP.name());
+        bundleSound.setName(Sound.ENTITY_PLAYER_LEVELUP.name());
         bundleSound.setPitch(1.0f);
         bundleSound.setVolume(1.0f);
         return bundleSound;

@@ -22,10 +22,10 @@ public class BundleListener implements Listener {
     public void onClick(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player player = event.getPlayer();
-            BundleItem bundleItem = BundleItem.getBundle(player.getItemInHand());
+            BundleItem bundleItem = BundleItem.getBundle(player.getInventory().getItemInMainHand());
             if (bundleItem != null) {
                 event.setCancelled(true);
-                player.getInventory().remove(player.getItemInHand());
+                player.getInventory().remove(player.getInventory().getItemInMainHand());
                 bundleItem.addItemToPlayer(player);
                 Bukkit.getScheduler().runTask(plugin,new EffectApply(plugin,bundleItem,player));
             }

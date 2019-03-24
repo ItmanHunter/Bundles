@@ -12,6 +12,7 @@ public class BundleMain extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Glow.createEnchantment(this);
         getDataFolder().mkdirs();
         registerGlow();
         getCommand("cbundle").setExecutor(new CreateBundle());
@@ -35,8 +36,7 @@ public class BundleMain extends JavaPlugin {
             e.printStackTrace();
         }
         try {
-            Glow glow = new Glow(70);
-            Enchantment.registerEnchantment(glow);
+            Enchantment.registerEnchantment(Glow.getEnchantment());
         }
         catch (IllegalArgumentException e){
         }
