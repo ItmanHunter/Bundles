@@ -76,6 +76,7 @@ public class BundleItem {
         bundleItem.setEnchant(false);
         bundleItem.setDescription(new String[] {HiddenStringUtil.encodeString("id:"+name)});
         bundleItem.setMaterial(Material.STONE_AXE.name());
+        bundleItem.setCommands(new BundleCommand[10]);
         bundleItem.saveBundle();
         return bundleItem;
     }
