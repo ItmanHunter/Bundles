@@ -25,6 +25,7 @@ public class BundleItem {
     private String material;
     private String[] description;
     private String inventory;
+    private BundleCommand[] commands;
 
     private BundleSound sound;
 
@@ -182,5 +183,13 @@ public class BundleItem {
 
     public void setSound(BundleSound sound) {
         this.sound = sound;
+    }
+
+    public BundleCommand[] getCommands() {
+        return commands;
+    }
+
+    public void setCommands(BundleCommand[] commands) {
+        this.commands = commands;
     }
 }

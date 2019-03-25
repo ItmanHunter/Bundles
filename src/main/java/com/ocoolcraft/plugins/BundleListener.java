@@ -1,6 +1,7 @@
 package com.ocoolcraft.plugins;
 
 import com.ocoolcraft.plugins.config.BundleItem;
+import com.ocoolcraft.plugins.tasks.ConsoleCommandExecutor;
 import com.ocoolcraft.plugins.tasks.EffectApply;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ public class BundleListener implements Listener {
                 player.getInventory().remove(player.getInventory().getItemInMainHand());
                 bundleItem.addItemToPlayer(player);
                 Bukkit.getScheduler().runTask(plugin,new EffectApply(plugin,bundleItem,player));
+                Bukkit.getScheduler().runTask(plugin,new ConsoleCommandExecutor(plugin,bundleItem,player));
             }
         }
     }
