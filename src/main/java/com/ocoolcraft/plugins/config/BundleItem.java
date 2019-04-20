@@ -80,7 +80,7 @@ public class BundleItem {
 
     public void saveBundle() {
         String fileName = LOCATION + File.separator + name + ".json";
-        Gson gson = new Gson();
+        Gson gson = new Gson().setPrettyPrinting().create();
         String bundleJson = gson.toJson(this,BundleItem.class);
         FileUtil.writeStringToFile(bundleJson,fileName);
     }
