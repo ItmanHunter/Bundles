@@ -116,7 +116,7 @@ public class BundleItem {
         ItemStack itemStack = new ItemStack(materialT,1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (enchant) {
-            itemMeta.addEnchant(Glow.getEnchantment(), 1, true);
+            //itemMeta.addEnchant(Glow.getEnchantment(), 1, true);
         }
         itemMeta.setDisplayName(ColorUtil.replaceColors(displayName));
         itemMeta.setLore(getLore());
