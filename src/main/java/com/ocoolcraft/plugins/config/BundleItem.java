@@ -1,6 +1,7 @@
 package com.ocoolcraft.plugins.config;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ocoolcraft.plugins.enchants.Glow;
 import com.ocoolcraft.plugins.utils.ColorUtil;
 import com.ocoolcraft.plugins.utils.FileUtil;
@@ -73,14 +74,14 @@ public class BundleItem {
         bundleItem.setName(name);
         bundleItem.setEnchant(false);
         bundleItem.setDescription(new String[] {HiddenStringUtil.encodeString("id:"+name)});
-        bundleItem.setMaterial(Material.WOOD_HOE.name());
+        bundleItem.setMaterial(Material.STONE_AXE.name());
         bundleItem.saveBundle();
         return bundleItem;
     }
 
     public void saveBundle() {
         String fileName = LOCATION + File.separator + name + ".json";
-        Gson gson = new Gson().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String bundleJson = gson.toJson(this,BundleItem.class);
         FileUtil.writeStringToFile(bundleJson,fileName);
     }
@@ -106,17 +107,16 @@ public class BundleItem {
     }
 
     public ItemStack getBundle() {
-        Material materialT = Material.DIAMOND_AXE;
+        Material materialT = Material.STONE_AXE;
         try {
             materialT = Material.getMaterial(material);
         } catch (Exception ex) {
-            materialT = Material.DIAMOND_AXE;
+            materialT = Material.STONE_AXE;
         }
         ItemStack itemStack = new ItemStack(materialT,1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (enchant) {
-            Glow glow = new Glow(Glow.ID);
-            itemMeta.addEnchant(glow, 1, true);
+            itemMeta.addEnchant(Glow.getEnchantment(), 1, true);
         }
         itemMeta.setDisplayName(ColorUtil.replaceColors(displayName));
         itemMeta.setLore(getLore());
