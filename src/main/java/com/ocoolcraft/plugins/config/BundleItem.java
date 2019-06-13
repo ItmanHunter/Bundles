@@ -4,12 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ocoolcraft.plugins.enchants.Glow;
 import com.ocoolcraft.plugins.utils.ColorUtil;
-import com.ocoolcraft.plugins.utils.FileUtil;
+import com.ocoolcraft.plugins.utils.FileUtils;
 import com.ocoolcraft.plugins.utils.HiddenStringUtil;
 import com.ocoolcraft.plugins.utils.InventoryUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -32,6 +31,7 @@ public class BundleItem {
     private boolean enchant;
 
     private ItemStack[] realInventory = null;
+    private int noOfItems;
 
     public String getName() {
         return name;
@@ -64,7 +64,7 @@ public class BundleItem {
             return null;
         }
         Gson gson = new Gson();
-        return gson.fromJson(FileUtil.readStringFromFile(fileName),BundleItem.class);
+        return gson.fromJson(FileUtils.readStringFromFile(fileName),BundleItem.class);
     }
 
     public static BundleItem createBundle(String name,Player player) {
@@ -85,7 +85,7 @@ public class BundleItem {
         String fileName = LOCATION + File.separator + name + ".json";
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String bundleJson = gson.toJson(this,BundleItem.class);
-        FileUtil.writeStringToFile(bundleJson,fileName);
+        FileUtils.writeStringToFile(bundleJson,fileName);
     }
 
     public static BundleItem getBundle(ItemStack itemStack) {
@@ -143,15 +143,31 @@ public class BundleItem {
         return realInventory;
     }
 
-    public void addItemToPlayer(Player player) {
-        Inventory playerInv = player.getInventory();
-        for(ItemStack itemStack: getRealInventory()) if(itemStack != null) {
-            if(player.getInventory().firstEmpty() == -1) {
-                player.getWorld().dropItemNaturally(player.getLocation(),itemStack);
-            } else {
-                player.getInventory().addItem(itemStack);
+    private boolean checkSpace(Player player) {
+        int count  = 0, real = 0;
+        for(ItemStack item:player.getInventory().getContents()) {
+            if (item == null) {
+                count++;
             }
         }
+        for (ItemStack item:getRealInventory()) {
+            if (item != null) {
+                real++;
+            }
+        }
+        return (count >= real);
+    }
+
+    public boolean addItemToPlayer(Player player) {
+        if (!checkSpace(player)) {
+            player.sendMessage("No space...");
+            return false;
+        }
+        for(ItemStack itemStack: getRealInventory()) if(itemStack != null) {
+                player.getInventory().addItem(itemStack);
+                player.updateInventory();
+        }
+        return true;
     }
 
     public String getMaterial() {

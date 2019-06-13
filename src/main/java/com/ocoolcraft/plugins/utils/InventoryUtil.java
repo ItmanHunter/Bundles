@@ -12,6 +12,20 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 public class InventoryUtil {
 
+    public static int freeSpace(Inventory inventory) {
+        return freeSpace(inventory.getContents());
+    }
+
+    public static int freeSpace(ItemStack[] items) {
+        int count = 0;
+        for(ItemStack itemStack:items) {
+            if (itemStack != null) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public static String toBase64(Inventory inventory) {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

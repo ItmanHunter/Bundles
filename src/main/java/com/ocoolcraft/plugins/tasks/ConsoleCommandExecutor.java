@@ -24,7 +24,7 @@ public class ConsoleCommandExecutor implements Runnable {
         if (bundleItem.getCommands() != null) {
             for(BundleCommand bundleCommand:bundleItem.getCommands()) {
                 if (bundleCommand != null) {
-                    CommandSender sender = (bundleCommand.getSender() == "console")?(plugin.getServer().getConsoleSender()):(player);
+                    CommandSender sender = (bundleCommand.getSender().equals("console"))?(plugin.getServer().getConsoleSender()):(player);
                     plugin.getServer().dispatchCommand(
                             sender,
                             ExpressionUtil.replaceVars(bundleCommand.getCommand(),player)
