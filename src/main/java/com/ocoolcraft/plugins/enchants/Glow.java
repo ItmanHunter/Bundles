@@ -1,6 +1,5 @@
 package com.ocoolcraft.plugins.enchants;
 
-import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
@@ -11,15 +10,16 @@ public class Glow extends Enchantment {
     private static Glow glow;
 
     public static void createEnchantment(JavaPlugin plugin) {
-        glow = new Glow(new NamespacedKey(plugin,"glow"));
+
+        glow = new Glow(673);
     }
 
     public static Enchantment getEnchantment() {
         return glow;
     }
 
-    public Glow(NamespacedKey key) {
-        super(key);
+    public Glow(int Id) {
+        super(Id);
     }
 
     @Deprecated
@@ -43,16 +43,6 @@ public class Glow extends Enchantment {
         return null;
     }
 
-    @Override
-    public boolean isTreasure() {
-        return false;
-    }
-
-    @Deprecated
-    @Override
-    public boolean isCursed() {
-        return false;
-    }
 
     @Override
     public boolean conflictsWith(Enchantment other) {

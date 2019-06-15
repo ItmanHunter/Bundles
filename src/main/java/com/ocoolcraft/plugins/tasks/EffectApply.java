@@ -1,7 +1,6 @@
 package com.ocoolcraft.plugins.tasks;
 
 import com.ocoolcraft.plugins.config.BundleItem;
-import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 

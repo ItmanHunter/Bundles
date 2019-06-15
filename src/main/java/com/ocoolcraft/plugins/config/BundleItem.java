@@ -8,6 +8,7 @@ import com.ocoolcraft.plugins.utils.FileUtils;
 import com.ocoolcraft.plugins.utils.HiddenStringUtil;
 import com.ocoolcraft.plugins.utils.InventoryUtil;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -160,7 +161,7 @@ public class BundleItem {
 
     public boolean addItemToPlayer(Player player) {
         if (!checkSpace(player)) {
-            player.sendMessage("No space...");
+            player.sendMessage("No space in your inventory");
             return false;
         }
         for(ItemStack itemStack: getRealInventory()) if(itemStack != null) {
