@@ -37,11 +37,7 @@ public class BundleListener implements Listener {
                 event.setCancelled(true);
                 if (bundleItem.addItemToPlayer(player)) {
                     int currentAmount = player.getInventory().getItemInMainHand().getAmount();
-                    if (currentAmount == 1) {
-                        player.getInventory().remove( player.getInventory().getItemInMainHand());
-                    } else {
-                        player.getInventory().getItemInMainHand().setAmount(currentAmount - 1);
-                    }
+                    player.getInventory().getItemInMainHand().setAmount(currentAmount - 1);
                 }
                 Bukkit.getScheduler().runTask(plugin,new EffectApply(plugin,bundleItem,player));
                 Bukkit.getScheduler().runTask(plugin,new ConsoleCommandExecutor(plugin,bundleItem,player));
