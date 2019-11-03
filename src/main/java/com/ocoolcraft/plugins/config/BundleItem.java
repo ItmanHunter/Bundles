@@ -24,6 +24,7 @@ public class BundleItem {
     private String material;
     private String[] description;
     private String inventory;
+    private String permission;
     private BundleCommand[] commands;
 
     private BundleSound sound;
@@ -208,5 +209,13 @@ public class BundleItem {
 
     public void setCommands(BundleCommand[] commands) {
         this.commands = commands;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 }

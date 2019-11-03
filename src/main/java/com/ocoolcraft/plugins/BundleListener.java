@@ -29,6 +29,11 @@ public class BundleListener implements Listener {
             Player player = event.getPlayer();
             BundleItem bundleItem = BundleItem.getBundle(player.getInventory().getItemInMainHand());
             if (bundleItem != null) {
+                if (bundleItem.getPermission() != null) {
+                    if (!player.hasPermission(bundleItem.getPermission())) {
+                        return;
+                    }
+                }
                 event.setCancelled(true);
                 if (bundleItem.addItemToPlayer(player)) {
                     int currentAmount = player.getInventory().getItemInMainHand().getAmount();
