@@ -72,12 +72,14 @@ public class BundleItem {
         BundleItem bundleItem = new BundleItem();
         bundleItem.setInventory(InventoryUtil.toBase64(player.getInventory()));
         bundleItem.setDisplayName(name);
+        bundleItem.setPermission("bundle." + name);
         bundleItem.setSound(BundleSound.getDefaultSound());
         bundleItem.setName(name);
         bundleItem.setEnchant(false);
         bundleItem.setDescription(new String[] {HiddenStringUtil.encodeString("id:"+name)});
         bundleItem.setMaterial(Material.STONE_AXE.name());
-        bundleItem.setCommands(new BundleCommand[10]);
+        BundleCommand[] commands = new BundleCommand[0];
+        bundleItem.setCommands(commands);
         bundleItem.saveBundle();
         return bundleItem;
     }
