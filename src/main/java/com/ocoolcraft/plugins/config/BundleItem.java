@@ -18,7 +18,7 @@ import java.util.List;
 
 public class BundleItem {
 
-    private static final String LOCATION = "plugins/BundleMain/";
+    private static String dataFolderPath = "plugins/Bundle/";
 
     private String name, displayName;
     private String material;
@@ -58,7 +58,7 @@ public class BundleItem {
     }
 
     public static BundleItem loadBundle(String name) {
-        String fileName = LOCATION + File.separator + name + ".json";
+        String fileName = dataFolderPath + File.separator + name + ".json";
         File file = new File(fileName);
         if (!file.exists()) {
             return null;
@@ -82,7 +82,7 @@ public class BundleItem {
     }
 
     public void saveBundle() {
-        String fileName = LOCATION + File.separator + name + ".json";
+        String fileName = dataFolderPath + File.separator + name + ".json";
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String bundleJson = gson.toJson(this,BundleItem.class);
         FileUtils.writeStringToFile(bundleJson,fileName);
