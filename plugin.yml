@@ -1,0 +1,14 @@
+name: Bundle
+version: 1.1
+author: ItmanHunter
+main: com.ocoolcraft.plugins.BundleMain
+description: Awesome plugin to create bundles
+commands:
+  cbundle:
+    permission: bundle.cbundle
+    description: create a bundle with all items in your inventory, later edit the json created for commands and stuff
+    usage: /cbundle <name>
+  getbundle:
+    permission: bundle.getbundle
+    description: Gets a particular bundle.
+    usage: /getbundle <name>

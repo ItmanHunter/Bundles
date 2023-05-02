@@ -2,6 +2,7 @@ package com.ocoolcraft.plugins.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ocoolcraft.plugins.enchants.Glow;
 import com.ocoolcraft.plugins.utils.ColorUtil;
 import com.ocoolcraft.plugins.utils.FileUtil;
 import com.ocoolcraft.plugins.utils.HiddenStringUtil;

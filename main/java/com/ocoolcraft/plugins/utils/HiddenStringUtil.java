@@ -1,8 +1,7 @@
 package com.ocoolcraft.plugins.utils;
+import java.nio.charset.Charset;
 
 import org.bukkit.ChatColor;
-
-import java.nio.charset.Charset;
 
 public class HiddenStringUtil {
 
