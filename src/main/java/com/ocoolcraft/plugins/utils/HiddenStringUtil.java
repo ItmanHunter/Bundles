@@ -18,25 +18,11 @@ public class HiddenStringUtil {
     public static boolean hasHiddenString(String input) {
         if (input == null) return false;
 
-        return input.indexOf(SEQUENCE_HEADER) > -1 && input.indexOf(SEQUENCE_FOOTER) > -1;
+        return input.contains(SEQUENCE_HEADER) && input.contains(SEQUENCE_FOOTER);
     }
 
     public static String extractHiddenString(String input) {
         return colorsToString(extract(input));
-    }
-
-
-    public static String replaceHiddenString(String input, String hiddenString) {
-        if (input == null) return null;
-
-        int start = input.indexOf(SEQUENCE_HEADER);
-        int end = input.indexOf(SEQUENCE_FOOTER);
-
-        if (start < 0 || end < 0) {
-            return null;
-        }
-
-        return input.substring(0, start + SEQUENCE_HEADER.length()) + stringToColors(hiddenString) + input.substring(end, input.length());
     }
 
     private static String quote(String input) {

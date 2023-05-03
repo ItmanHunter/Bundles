@@ -3,6 +3,7 @@ version: 1.0
 author: ItmanHunter
 main: com.ocoolcraft.plugins.BundleMain
 description: Awesome plugin to create bundles
+api-version: 1.13
 commands:
   cbundle:
     permission: bundle.cbundle

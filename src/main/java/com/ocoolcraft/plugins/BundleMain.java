@@ -3,6 +3,8 @@ package com.ocoolcraft.plugins;
 import com.ocoolcraft.plugins.comand.CreateBundle;
 import com.ocoolcraft.plugins.comand.GetBundle;
 import com.ocoolcraft.plugins.enchants.Glow;
+import com.ocoolcraft.plugins.utils.Logger;
+import com.ocoolcraft.plugins.utils.PersistentDataHolderUtil;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,12 +14,18 @@ public class BundleMain extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        registerUtils();
         getDataFolder().mkdirs();
         registerGlow();
         getCommand("cbundle").setExecutor(new CreateBundle());
         getCommand("getbundle").setExecutor(new GetBundle());
         getServer().getPluginManager().registerEvents(new BundleListener(this), this);
-        getLogger().info("Enabled BundleMain");
+        Logger.log("Enabled BundleMain");
+    }
+
+    private void registerUtils() {
+        PersistentDataHolderUtil.plugin = this;
+        Logger.plugin = this;
     }
 
     @Override
@@ -32,16 +40,17 @@ public class BundleMain extends JavaPlugin {
             f.set(null, true);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            Logger.log(e);
         }
         try {
-            Glow glow = new Glow(this, 70);
-            Enchantment.registerEnchantment(glow);
+            Glow.createEnchantment(this);
+            Enchantment.registerEnchantment(Glow.getEnchantment());
         }
         catch (IllegalArgumentException e){
+            Logger.log(e);
         }
         catch(Exception e){
-            e.printStackTrace();
+            Logger.log(e);
         }
     }
 

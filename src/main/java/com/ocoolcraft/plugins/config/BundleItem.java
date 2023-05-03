@@ -2,28 +2,28 @@ package com.ocoolcraft.plugins.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ocoolcraft.plugins.utils.ColorUtil;
-import com.ocoolcraft.plugins.utils.FileUtil;
-import com.ocoolcraft.plugins.utils.HiddenStringUtil;
-import com.ocoolcraft.plugins.utils.InventoryUtil;
+import com.ocoolcraft.plugins.enchants.Glow;
+import com.ocoolcraft.plugins.utils.*;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BundleItem {
 
-    private static final String LOCATION = "plugins/BundleMain/";
+    private static final String LOCATION = "plugins/Bundle/";
+    private static final String DataKey = "BundleItemKey";
 
     private String name, displayName;
     private String material;
     private String[] description;
     private String inventory;
+    private BundleCommand[] commands;
 
     private BundleSound sound;
 
@@ -62,7 +62,7 @@ public class BundleItem {
             return null;
         }
         Gson gson = new Gson();
-        return gson.fromJson(FileUtil.readStringFromFile(fileName),BundleItem.class);
+        return gson.fromJson(FileUtils.readStringFromFile(fileName),BundleItem.class);
     }
 
     public static BundleItem createBundle(String name,Player player) {
@@ -74,6 +74,7 @@ public class BundleItem {
         bundleItem.setEnchant(false);
         bundleItem.setDescription(new String[] {HiddenStringUtil.encodeString("id:"+name)});
         bundleItem.setMaterial(Material.STONE_AXE.name());
+        bundleItem.setCommands(new BundleCommand[1]);
         bundleItem.saveBundle();
         return bundleItem;
     }
@@ -82,7 +83,7 @@ public class BundleItem {
         String fileName = LOCATION + File.separator + name + ".json";
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String bundleJson = gson.toJson(this,BundleItem.class);
-        FileUtil.writeStringToFile(bundleJson,fileName);
+        FileUtils.writeStringToFile(bundleJson,fileName);
     }
 
     public static BundleItem getBundle(ItemStack itemStack) {
@@ -102,6 +103,10 @@ public class BundleItem {
                 }
             }
         }
+        String data = PersistentDataHolderUtil.getData(itemStack.getItemMeta(), DataKey);
+        if (!Objects.isNull(data)) {
+            return loadBundle(data);
+        }
         return null;
     }
 
@@ -115,10 +120,11 @@ public class BundleItem {
         ItemStack itemStack = new ItemStack(materialT,1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (enchant) {
-            //itemMeta.addEnchant(Glow.getEnchantment(), 1, true);
+            itemMeta.addEnchant(Glow.getEnchantment(), 1, true);
         }
         itemMeta.setDisplayName(ColorUtil.replaceColors(displayName));
         itemMeta.setLore(getLore());
+        PersistentDataHolderUtil.setData(itemMeta, DataKey, name);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
@@ -140,15 +146,31 @@ public class BundleItem {
         return realInventory;
     }
 
-    public void addItemToPlayer(Player player) {
-        Inventory playerInv = player.getInventory();
-        for(ItemStack itemStack: getRealInventory()) if(itemStack != null) {
-            if(player.getInventory().firstEmpty() == -1) {
-                player.getWorld().dropItemNaturally(player.getLocation(),itemStack);
-            } else {
-                player.getInventory().addItem(itemStack);
+    private boolean checkSpace(Player player) {
+        int count  = 0, real = 0;
+        for(ItemStack item:player.getInventory().getContents()) {
+            if (item == null) {
+                count++;
             }
         }
+        for (ItemStack item:getRealInventory()) {
+            if (item != null) {
+                real++;
+            }
+        }
+        return (count >= real);
+    }
+
+    public boolean addItemToPlayer(Player player) {
+        if (!checkSpace(player)) {
+            player.sendMessage("No space...");
+            return false;
+        }
+        for(ItemStack itemStack: getRealInventory()) if(itemStack != null) {
+                player.getInventory().addItem(itemStack);
+                player.updateInventory();
+        }
+        return true;
     }
 
     public String getMaterial() {
@@ -181,5 +203,13 @@ public class BundleItem {
 
     public void setSound(BundleSound sound) {
         this.sound = sound;
+    }
+
+    public BundleCommand[] getCommands() {
+        return commands;
+    }
+
+    public void setCommands(BundleCommand[] commands) {
+        this.commands = commands;
     }
 }

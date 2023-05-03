@@ -1,6 +1,7 @@
 package com.ocoolcraft.plugins;
 
 import com.ocoolcraft.plugins.config.BundleItem;
+import com.ocoolcraft.plugins.tasks.ConsoleCommandExecutor;
 import com.ocoolcraft.plugins.tasks.EffectApply;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,19 +22,17 @@ public class BundleListener implements Listener {
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            plugin.getLogger().info(event.getAction().name());
             Player player = event.getPlayer();
             BundleItem bundleItem = BundleItem.getBundle(player.getInventory().getItemInMainHand());
             if (bundleItem != null) {
+                plugin.getLogger().info(bundleItem.getName());
                 event.setCancelled(true);
-                int currentAmount = player.getInventory().getItemInMainHand().getAmount();
-                if (currentAmount == 1) {
-                    player.getInventory().remove( player.getInventory().getItemInMainHand());
-                } else {
-                    player.getInventory().getItemInMainHand().setAmount(currentAmount - 1);
+                if (bundleItem.addItemToPlayer(player)) {
+                    player.getInventory().remove(player.getInventory().getItemInMainHand());
                 }
-                player.getInventory().remove(player.getInventory().getItemInMainHand());
-                bundleItem.addItemToPlayer(player);
                 Bukkit.getScheduler().runTask(plugin,new EffectApply(plugin,bundleItem,player));
+                Bukkit.getScheduler().runTask(plugin,new ConsoleCommandExecutor(plugin,bundleItem,player));
             }
         }
     }

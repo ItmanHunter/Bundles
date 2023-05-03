@@ -1,27 +1,41 @@
 package com.ocoolcraft.plugins.enchants;
 
-import com.ocoolcraft.plugins.BundleMain;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class Glow extends Enchantment {
 
-    public final static int ID = 70;
+    private static Glow glow;
 
-    public Glow(BundleMain bundleMain, int id) {
-        super(new NamespacedKey(bundleMain, id + ""));
+    public static void createEnchantment(JavaPlugin plugin) {
+        glow = new Glow(new NamespacedKey(plugin, "glow"));
+    }
+
+    public static Enchantment getEnchantment() {
+        return glow;
+    }
+
+    public Glow(NamespacedKey key) {
+        super(key);
+    }
+
+    @Deprecated
+    @Override
+    public String getName() {
+        return "GLOW";
     }
 
     @Override
-    public boolean canEnchantItem(ItemStack arg0) {
-        return false;
+    public int getMaxLevel() {
+        return 0;
     }
 
     @Override
-    public boolean conflictsWith(Enchantment arg0) {
-        return false;
+    public int getStartLevel() {
+        return 0;
     }
 
     @Override
@@ -40,18 +54,14 @@ public class Glow extends Enchantment {
     }
 
     @Override
-    public int getMaxLevel() {
-        return 0;
+    public boolean conflictsWith(Enchantment other) {
+        return false;
     }
 
     @Override
-    public String getName() {
-        return null;
+    public boolean canEnchantItem(ItemStack item) {
+        return false;
     }
 
-    @Override
-    public int getStartLevel() {
-        return 0;
-    }
 
 }
